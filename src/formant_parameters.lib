@@ -1,0 +1,168 @@
+/*
+Determine the formant parameters based on the zone of the vocalic space.
+*/
+
+
+// 2D interpolation. Given four vertex values and two parameters lambda and mu,
+// this function returns an interpolated value between those four values.
+// When both lambda and mu are equal to either 0 or 1, the result is equal to
+// val_(lambda, mu), where val_(lambda, mu) is the matching one value
+// among the four specified.
+// So for instance, interpolate(_, _, val_10, _, 1, 0) == val_10.
+interpolate(val_00, val_01, val_10, val_11, lambda, mu) =
+    lambda * (mu * val_11 + (1-mu) * val_10) + (1-lambda) * (mu * val_01 + (1-mu) * val_00);
+
+
+// Use values from Table 3 in the article.
+import("table3.lib");
+
+
+// Formant frequencies
+//---------------------
+
+F1G = (
+interpolate(vow_u.f1, vow_o.f1, vow_y.f1, vow_9.f1, normalized_V, normalized_H),
+interpolate(vow_o.f1, vow_O.f1, vow_9.f1, vow_2.f1, normalized_V, normalized_H),
+interpolate(vow_O.f1, vow_a.f1, vow_2.f1, vow_a.f1, normalized_V, normalized_H),
+interpolate(vow_y.f1, vow_9.f1, vow_i.f1, vow_e.f1, normalized_V, normalized_H),
+interpolate(vow_9.f1, vow_2.f1, vow_e.f1, vow_E.f1, normalized_V, normalized_H),
+interpolate(vow_2.f1, vow_a.f1, vow_E.f1, vow_a.f1, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+
+F2G = (
+interpolate(vow_u.f2, vow_o.f2, vow_y.f2, vow_9.f2, normalized_V, normalized_H),
+interpolate(vow_o.f2, vow_O.f2, vow_9.f2, vow_2.f2, normalized_V, normalized_H),
+interpolate(vow_O.f2, vow_a.f2, vow_2.f2, vow_a.f2, normalized_V, normalized_H),
+interpolate(vow_y.f2, vow_9.f2, vow_i.f2, vow_e.f2, normalized_V, normalized_H),
+interpolate(vow_9.f2, vow_2.f2, vow_e.f2, vow_E.f2, normalized_V, normalized_H),
+interpolate(vow_2.f2, vow_a.f2, vow_E.f2, vow_a.f2, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+
+F3G = (
+interpolate(vow_u.f3, vow_o.f3, vow_y.f3, vow_9.f3, normalized_V, normalized_H),
+interpolate(vow_o.f3, vow_O.f3, vow_9.f3, vow_2.f3, normalized_V, normalized_H),
+interpolate(vow_O.f3, vow_a.f3, vow_2.f3, vow_a.f3, normalized_V, normalized_H),
+interpolate(vow_y.f3, vow_9.f3, vow_i.f3, vow_e.f3, normalized_V, normalized_H),
+interpolate(vow_9.f3, vow_2.f3, vow_e.f3, vow_E.f3, normalized_V, normalized_H),
+interpolate(vow_2.f3, vow_a.f3, vow_E.f3, vow_a.f3, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+
+F4G = (
+interpolate(vow_u.f4, vow_o.f4, vow_y.f4, vow_9.f4, normalized_V, normalized_H),
+interpolate(vow_o.f4, vow_O.f4, vow_9.f4, vow_2.f4, normalized_V, normalized_H),
+interpolate(vow_O.f4, vow_a.f4, vow_2.f4, vow_a.f4, normalized_V, normalized_H),
+interpolate(vow_y.f4, vow_9.f4, vow_i.f4, vow_e.f4, normalized_V, normalized_H),
+interpolate(vow_9.f4, vow_2.f4, vow_e.f4, vow_E.f4, normalized_V, normalized_H),
+interpolate(vow_2.f4, vow_a.f4, vow_E.f4, vow_a.f4, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+
+F5G = (
+interpolate(vow_u.f5, vow_o.f5, vow_y.f5, vow_9.f5, normalized_V, normalized_H),
+interpolate(vow_o.f5, vow_O.f5, vow_9.f5, vow_2.f5, normalized_V, normalized_H),
+interpolate(vow_O.f5, vow_a.f5, vow_2.f5, vow_a.f5, normalized_V, normalized_H),
+interpolate(vow_y.f5, vow_9.f5, vow_i.f5, vow_e.f5, normalized_V, normalized_H),
+interpolate(vow_9.f5, vow_2.f5, vow_e.f5, vow_E.f5, normalized_V, normalized_H),
+interpolate(vow_2.f5, vow_a.f5, vow_E.f5, vow_a.f5, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+
+// Formant bandwidths
+//--------------------
+
+B1 = (
+interpolate(vow_u.b1, vow_o.b1, vow_y.b1, vow_9.b1, normalized_V, normalized_H),
+interpolate(vow_o.b1, vow_O.b1, vow_9.b1, vow_2.b1, normalized_V, normalized_H),
+interpolate(vow_O.b1, vow_a.b1, vow_2.b1, vow_a.b1, normalized_V, normalized_H),
+interpolate(vow_y.b1, vow_9.b1, vow_i.b1, vow_e.b1, normalized_V, normalized_H),
+interpolate(vow_9.b1, vow_2.b1, vow_e.b1, vow_E.b1, normalized_V, normalized_H),
+interpolate(vow_2.b1, vow_a.b1, vow_E.b1, vow_a.b1, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+B2 = (
+interpolate(vow_u.b2, vow_o.b2, vow_y.b2, vow_9.b2, normalized_V, normalized_H),
+interpolate(vow_o.b2, vow_O.b2, vow_9.b2, vow_2.b2, normalized_V, normalized_H),
+interpolate(vow_O.b2, vow_a.b2, vow_2.b2, vow_a.b2, normalized_V, normalized_H),
+interpolate(vow_y.b2, vow_9.b2, vow_i.b2, vow_e.b2, normalized_V, normalized_H),
+interpolate(vow_9.b2, vow_2.b2, vow_e.b2, vow_E.b2, normalized_V, normalized_H),
+interpolate(vow_2.b2, vow_a.b2, vow_E.b2, vow_a.b2, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+B3 = (
+interpolate(vow_u.b3, vow_o.b3, vow_y.b3, vow_9.b3, normalized_V, normalized_H),
+interpolate(vow_o.b3, vow_O.b3, vow_9.b3, vow_2.b3, normalized_V, normalized_H),
+interpolate(vow_O.b3, vow_a.b3, vow_2.b3, vow_a.b3, normalized_V, normalized_H),
+interpolate(vow_y.b3, vow_9.b3, vow_i.b3, vow_e.b3, normalized_V, normalized_H),
+interpolate(vow_9.b3, vow_2.b3, vow_e.b3, vow_E.b3, normalized_V, normalized_H),
+interpolate(vow_2.b3, vow_a.b3, vow_E.b3, vow_a.b3, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+B4 = (
+interpolate(vow_u.b4, vow_o.b4, vow_y.b4, vow_9.b4, normalized_V, normalized_H),
+interpolate(vow_o.b4, vow_O.b4, vow_9.b4, vow_2.b4, normalized_V, normalized_H),
+interpolate(vow_O.b4, vow_a.b4, vow_2.b4, vow_a.b4, normalized_V, normalized_H),
+interpolate(vow_y.b4, vow_9.b4, vow_i.b4, vow_e.b4, normalized_V, normalized_H),
+interpolate(vow_9.b4, vow_2.b4, vow_e.b4, vow_E.b4, normalized_V, normalized_H),
+interpolate(vow_2.b4, vow_a.b4, vow_E.b4, vow_a.b4, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+B5 = (
+interpolate(vow_u.b5, vow_o.b5, vow_y.b5, vow_9.b5, normalized_V, normalized_H),
+interpolate(vow_o.b5, vow_O.b5, vow_9.b5, vow_2.b5, normalized_V, normalized_H),
+interpolate(vow_O.b5, vow_a.b5, vow_2.b5, vow_a.b5, normalized_V, normalized_H),
+interpolate(vow_y.b5, vow_9.b5, vow_i.b5, vow_e.b5, normalized_V, normalized_H),
+interpolate(vow_9.b5, vow_2.b5, vow_e.b5, vow_E.b5, normalized_V, normalized_H),
+interpolate(vow_2.b5, vow_a.b5, vow_E.b5, vow_a.b5, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+
+// Formant amplitudes
+//--------------------
+
+A1G = (
+interpolate(vow_u.a1, vow_o.a1, vow_y.a1, vow_9.a1, normalized_V, normalized_H),
+interpolate(vow_o.a1, vow_O.a1, vow_9.a1, vow_2.a1, normalized_V, normalized_H),
+interpolate(vow_O.a1, vow_a.a1, vow_2.a1, vow_a.a1, normalized_V, normalized_H),
+interpolate(vow_y.a1, vow_9.a1, vow_i.a1, vow_e.a1, normalized_V, normalized_H),
+interpolate(vow_9.a1, vow_2.a1, vow_e.a1, vow_E.a1, normalized_V, normalized_H),
+interpolate(vow_2.a1, vow_a.a1, vow_E.a1, vow_a.a1, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+A2G = (
+interpolate(vow_u.a2, vow_o.a2, vow_y.a2, vow_9.a2, normalized_V, normalized_H),
+interpolate(vow_o.a2, vow_O.a2, vow_9.a2, vow_2.a2, normalized_V, normalized_H),
+interpolate(vow_O.a2, vow_a.a2, vow_2.a2, vow_a.a2, normalized_V, normalized_H),
+interpolate(vow_y.a2, vow_9.a2, vow_i.a2, vow_e.a2, normalized_V, normalized_H),
+interpolate(vow_9.a2, vow_2.a2, vow_e.a2, vow_E.a2, normalized_V, normalized_H),
+interpolate(vow_2.a2, vow_a.a2, vow_E.a2, vow_a.a2, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+A3G = (
+interpolate(vow_u.a3, vow_o.a3, vow_y.a3, vow_9.a3, normalized_V, normalized_H),
+interpolate(vow_o.a3, vow_O.a3, vow_9.a3, vow_2.a3, normalized_V, normalized_H),
+interpolate(vow_O.a3, vow_a.a3, vow_2.a3, vow_a.a3, normalized_V, normalized_H),
+interpolate(vow_y.a3, vow_9.a3, vow_i.a3, vow_e.a3, normalized_V, normalized_H),
+interpolate(vow_9.a3, vow_2.a3, vow_e.a3, vow_E.a3, normalized_V, normalized_H),
+interpolate(vow_2.a3, vow_a.a3, vow_E.a3, vow_a.a3, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+A4G = (
+interpolate(vow_u.a4, vow_o.a4, vow_y.a4, vow_9.a4, normalized_V, normalized_H),
+interpolate(vow_o.a4, vow_O.a4, vow_9.a4, vow_2.a4, normalized_V, normalized_H),
+interpolate(vow_O.a4, vow_a.a4, vow_2.a4, vow_a.a4, normalized_V, normalized_H),
+interpolate(vow_y.a4, vow_9.a4, vow_i.a4, vow_e.a4, normalized_V, normalized_H),
+interpolate(vow_9.a4, vow_2.a4, vow_e.a4, vow_E.a4, normalized_V, normalized_H),
+interpolate(vow_2.a4, vow_a.a4, vow_E.a4, vow_a.a4, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
+
+A5G = (
+interpolate(vow_u.a5, vow_o.a5, vow_y.a5, vow_9.a5, normalized_V, normalized_H),
+interpolate(vow_o.a5, vow_O.a5, vow_9.a5, vow_2.a5, normalized_V, normalized_H),
+interpolate(vow_O.a5, vow_a.a5, vow_2.a5, vow_a.a5, normalized_V, normalized_H),
+interpolate(vow_y.a5, vow_9.a5, vow_i.a5, vow_e.a5, normalized_V, normalized_H),
+interpolate(vow_9.a5, vow_2.a5, vow_e.a5, vow_E.a5, normalized_V, normalized_H),
+interpolate(vow_2.a5, vow_a.a5, vow_E.a5, vow_a.a5, normalized_V, normalized_H)
+) : ba.selectn(6, vocalic_zone - 1);
